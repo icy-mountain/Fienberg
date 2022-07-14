@@ -1,4 +1,4 @@
-
+#install.packages("dplyr")
 # data definition####
 table7_2 <- '
 FirstMembership FirstAttitude SecondMembership SecondAttitude Freq
@@ -26,8 +26,8 @@ minus           minus         minus            minus          554
 library(dplyr)
 df7_2 <- read.table(textConnection(table7_2),head=T)
 # data for ABC
-SecAttitude_plus <- df7_2 %>% filter(SecondAttitude == "plus")
-SecAttitude_minus <- df7_2 %>% filter(SecondAttitude == "minus")
+SecAttitude_plus <- df7_2 |> filter(SecondAttitude == "plus")
+SecAttitude_minus <- df7_2 |> filter(SecondAttitude == "minus")
 merged_SecAttitudeFreq <- SecAttitude_plus$Freq + SecAttitude_minus$Freq
 df7_2ABC <- subset(SecAttitude_plus, select=-c(SecondAttitude))
 df7_2ABC$Freq <- merged_SecAttitudeFreq
