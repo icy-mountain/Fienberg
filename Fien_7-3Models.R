@@ -25,6 +25,7 @@ model6_logit <- loglm(formula = (df7_3OrderedABCDLow$Freq / df7_3OrderedABCDHigh
 #                         SES:IQ:PE + SES:Sex:PE + IQ:Sex:PE,
 #                       data = df7_3OrderedABCDHigh)
 model6_logit[["param"]]
+summary(model6)
 #### for ABCDE
 #[ABCD][BCE][AE][DE]
 model9 <- loglm(formula = Freq ~ SES:IQ:Sex:PE +

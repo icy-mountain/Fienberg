@@ -40,8 +40,14 @@ SquashedByCol <- function(df, col) {
 df7_8 <- read.table(textConnection(table7_8),head=T)
 df7_8ABC <- SquashedByCol(df7_8, "SecondCandidateOpinion")
 df7_8AB <- SquashedByCol(df7_8ABC, "SecondVoteIntention")
-vx=matrix(df7_8AB$Freq,nrow=2,byrow=T)
-chisq.test(vx)
+df7_8ABC2ndVIRepub <- df7_8ABC[df7_8ABC$SecondVoteIntention == "Republicon",]
+df7_8ABC2ndVIDemoc <- df7_8ABC[df7_8ABC$SecondVoteIntention == "Democrat",] 
+df7_8ABCD2ndCOFor <- df7_8[df7_8$SecondCandidateOpinion == "For",]
+df7_8ABCD2ndCOAga <- df7_8[df7_8$SecondCandidateOpinion == "Against",]
+df7_8ABCD2ndCOFor[df7_8ABCD2ndCOFor$Freq == 0,]$Freq <- 1
+df7_8ABCD2ndCOAga[df7_8ABCD2ndCOAga$Freq == 0,]$Freq <- 1
+# vx=matrix(df7_8AB$Freq,nrow=2,byrow=T)
+# chisq.test(vx)
 # X^2_{0.05}(1) = 3.84 
 # [AB]####
 modelAB_AC_BC <- loglm(formula = Freq ~ FirstVoteIntention:FirstCandidateOpinion +
@@ -50,14 +56,21 @@ modelAB_AC_BC <- loglm(formula = Freq ~ FirstVoteIntention:FirstCandidateOpinion
                 data=df7_8ABC)
 modelAB_AC <- update(modelAB_AC_BC,
                      .~.-FirstCandidateOpinion:SecondVoteIntention)
-modelAB_BC <- update(modelAB_AC_BC,
-                     .~.-FirstVoteIntention:SecondVoteIntention)
-modelAC_BC <- update(modelAB_AC_BC,
-                     .~.-FirstVoteIntention:FirstCandidateOpinion)
-summary(modelAC_BC)     #lrt=7.144975 df=2 P=0.028
-summary(modelAB_BC)     #lrt=213.8826 df=2 P=0
+# modelAB_BC <- update(modelAB_AC_BC,
+#                      .~.-FirstVoteIntention:SecondVoteIntention)
+# modelAC_BC <- update(modelAB_AC_BC,
+#                      .~.-FirstVoteIntention:FirstCandidateOpinion)
+# summary(modelAC_BC)     #lrt=7.144975 df=2 P=0.028
+# summary(modelAB_BC)     #lrt=213.8826 df=2 P=0
 summary(modelAB_AC)     #lrt=0.1543353 df=2 P=0.926 pick up!!
 summary(modelAB_AC_BC)  #lrt=0.0142554 df=1 P=0.905
+# logit [AB]####
+modelAB_AClogit <- loglm(formula = (df7_8ABC2ndVIRepub$Freq / df7_8ABC2ndVIDemoc$Freq) ~
+                           SecondVoteIntention +
+                           FirstVoteIntention:SecondVoteIntention,
+                         data=df7_8ABC2ndVIRepub)
+summary(modelAB_AClogit)
+# modelAB_AC[["param"]][["FirstVoteIntention.SecondVoteIntention"]]
 # [ABC]####
 modelABC_AD_BD_CD <- loglm(formula = Freq ~
                              FirstVoteIntention:FirstCandidateOpinion:SecondVoteIntention +
@@ -65,13 +78,22 @@ modelABC_AD_BD_CD <- loglm(formula = Freq ~
                          FirstCandidateOpinion:SecondCandidateOpinion +
                          SecondVoteIntention:SecondCandidateOpinion,
                        data=df7_8)
-modelABC_AD_BD <- update(modelABC_AD_BD_CD,
-                     .~.-SecondVoteIntention:SecondCandidateOpinion)
-modelABC_AD_CD <- update(modelABC_AD_BD_CD,
-                     .~.-FirstCandidateOpinion:SecondCandidateOpinion)
+# modelABC_AD_BD <- update(modelABC_AD_BD_CD,
+#                      .~.-SecondVoteIntention:SecondCandidateOpinion)
+# modelABC_AD_CD <- update(modelABC_AD_BD_CD,
+#                      .~.-FirstCandidateOpinion:SecondCandidateOpinion)
 modelABC_BD_CD <- update(modelABC_AD_BD_CD,
                          .~.-FirstVoteIntention:SecondCandidateOpinion)
 summary(modelABC_BD_CD)   #lrt=1.453260 df=5 P=0.9183997 pick up!!!
-summary(modelABC_AD_CD)   #lrt=103.2223 df=5 P=0
-summary(modelABC_AD_BD)   #lrt=16.96661 df=5 P=4.563560e-03
-summary(modelABC_AD_BD_CD)#lrt=0.709475 df=4 P=0.9501554
+# summary(modelABC_AD_CD)   #lrt=103.2223 df=5 P=0
+# summary(modelABC_AD_BD)   #lrt=16.96661 df=5 P=4.563560e-03
+# summary(modelABC_AD_BD_CD)#lrt=0.709475 df=4 P=0.9501554
+# logit [ABC]####
+modelABC_BD_CDlogit <- loglm(formula = (df7_8ABCD2ndCOFor$Freq / df7_8ABCD2ndCOAga$Freq) ~
+                               SecondCandidateOpinion +
+                               FirstCandidateOpinion:SecondCandidateOpinion +
+                               SecondVoteIntention:SecondCandidateOpinion,
+                           data=df7_8ABCD2ndCOFor)
+summary(modelABC_BD_CDlogit)
+# modelABC_AD_BD_CD[["param"]][["FirstCandidateOpinion.SecondCandidateOpinion"]]
+# modelABC_AD_BD_CD[["param"]][["SecondVoteIntention.SecondCandidateOpinion"]]

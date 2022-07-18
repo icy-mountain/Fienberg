@@ -1,4 +1,3 @@
-rm(list = ls(all.names = TRUE))
 # data definition####
 table7_3 <- '
 Sex IQ CP  PE  SES Freq
