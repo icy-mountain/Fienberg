@@ -20,7 +20,7 @@ Minus        Minus    Minus      Plus         41
 Minus        Minus    Minus      Minus        118
 '
 # dataframe definition####
-# Proximity_Ai Norms_Bj Contact_Ck Sentiment_Dl
+# Proximity_Ai Norms_Bj Contact_Ck Sentiment_Dl 
 SquashedByCol <- function(df, col) {
   colFactor <- factor(df[[col]])
   vals <- attributes(colFactor)$levels
@@ -49,3 +49,30 @@ summary(modelAC_AD_BC_BD_CD)#14.96897  6 0.02049947
 summary(modelAB_AD_BC_BD_CD)#45.91089  6 3.083984e-08
 summary(modelAB_AC_BC_BD_CD)#2.530110  6 0.8650827 pick up!
 summary(modelAB_AC_AD_BC_BD_CD)# 2.248026  5 0.8138694
+
+# 7-5####
+table7_7 <- 
+'
+PorC       Losses   BirthOrder Freq
+Problems   Yes      2          20
+Problems   Yes      3or4       26
+Problems   Yes      5Plus      27 
+Problems   No       2          82
+Problems   No       3or4       41
+Problems   No       5Plus      22
+Controls   Yes      2          10
+Controls   Yes      3or4       16   
+Controls   Yes      5Plus      14   
+Controls   No       2          54
+Controls   No       3or4       30   
+Controls   No       5Plus      23
+'
+df7_7 <- read.table(textConnection(table7_7),head=T)
+model_ <- loglm(formula = Freq ~ ., data=df7_7)
+model2 <- update(model_, .~.^2)
+modelNoPorC <- update(model2, .~.-PorC:Losses)
+modelNoBO <- update(model2, .~.-BirthOrder:Losses)
+
+summary(modelNoBO)
+summary(modelNoPorC)
+summary(model2)
