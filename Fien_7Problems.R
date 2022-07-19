@@ -69,8 +69,9 @@ modelAB_AClogit <- loglm(formula = (df7_8ABC2ndVIRepub$Freq / df7_8ABC2ndVIDemoc
                            SecondVoteIntention +
                            FirstVoteIntention:SecondVoteIntention,
                          data=df7_8ABC2ndVIRepub)
-summary(modelAB_AClogit)
-# modelAB_AC[["param"]][["FirstVoteIntention.SecondVoteIntention"]]
+summary(modelAB_AClogit) #1.288693  2 0.5250055
+modelAB_AC[["param"]][["FirstVoteIntention.SecondVoteIntention"]]
+modelAB_AClogit[["param"]][["FirstVoteIntention"]]
 # [ABC]####
 modelABC_AD_BD_CD <- loglm(formula = Freq ~
                              FirstVoteIntention:FirstCandidateOpinion:SecondVoteIntention +
@@ -94,6 +95,8 @@ modelABC_BD_CDlogit <- loglm(formula = (df7_8ABCD2ndCOFor$Freq / df7_8ABCD2ndCOA
                                FirstCandidateOpinion:SecondCandidateOpinion +
                                SecondVoteIntention:SecondCandidateOpinion,
                            data=df7_8ABCD2ndCOFor)
-summary(modelABC_BD_CDlogit)
-# modelABC_AD_BD_CD[["param"]][["FirstCandidateOpinion.SecondCandidateOpinion"]]
-# modelABC_AD_BD_CD[["param"]][["SecondVoteIntention.SecondCandidateOpinion"]]
+summary(modelABC_BD_CDlogit) #56.17216  5 7.489476e-11
+modelABC_BD_CD[["param"]][["FirstCandidateOpinion.SecondCandidateOpinion"]]
+modelABC_BD_CDlogit[["param"]][["FirstCandidateOpinion"]]
+modelABC_BD_CD[["param"]][["SecondCandidateOpinion.SecondVoteIntention"]]
+modelABC_BD_CDlogit[["param"]][["SecondVoteIntention"]]

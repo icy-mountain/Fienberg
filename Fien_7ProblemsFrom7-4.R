@@ -49,7 +49,7 @@ summary(modelAC_AD_BC_BD_CD)#14.96897  6 0.02049947
 summary(modelAB_AD_BC_BD_CD)#45.91089  6 3.083984e-08
 summary(modelAB_AC_BC_BD_CD)#2.530110  6 0.8650827 pick up!
 summary(modelAB_AC_AD_BC_BD_CD)# 2.248026  5 0.8138694
-
+# update(modelAB_AC_AD_BC_BD_CD, .~.-Proximity_Ai-Norms_Bj-Contact_Ck-Sentiment_Dl)
 # 7-5####
 table7_7 <- 
 '
@@ -72,7 +72,6 @@ model_ <- loglm(formula = Freq ~ ., data=df7_7)
 model2 <- update(model_, .~.^2)
 modelNoPorC <- update(model2, .~.-PorC:Losses)
 modelNoBO <- update(model2, .~.-BirthOrder:Losses)
-
 summary(modelNoBO)
 summary(modelNoPorC)
 summary(model2)
